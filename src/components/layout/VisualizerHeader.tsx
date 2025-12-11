@@ -7,6 +7,8 @@ import { useApp } from "@/stores/appStore";
 import { useVisualizerContext } from "@/context/VisualizerContext";
 import Konva from "konva";
 
+import { Menu } from "lucide-react";
+
 interface VisualizerHeaderProps {
   project: any;
 }
@@ -18,17 +20,7 @@ const VisualizerHeader = ({ project }: VisualizerHeaderProps) => {
 
 
   const handleToggle = () => {
-    let state: any = "";
-    if (sideMenu === "toggled") {
-      state = "collapse";
-    } else if (sideMenu === "collapse") {
-      state = "hidden";
-    } else if (sideMenu === "hidden") {
-      state = "toggled";
-    } else {
-      state = "toggled";
-    }
-    toggleSideMenu(state);
+    toggleSideMenu(sideMenu === 'toggled' ? 'hidden' : 'toggled');
   };
 
   useEffect(() => {
@@ -93,7 +85,7 @@ const VisualizerHeader = ({ project }: VisualizerHeaderProps) => {
       <View>
         <button
           onClick={handleToggle}
-        >X</button>
+        ><Menu /></button>
       </View>
       <View className="flex gap-4 items-center">
         <button onClick={() => handleZoom(1 / SCALE_STEP)}>Zoom Out</button>
