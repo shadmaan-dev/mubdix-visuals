@@ -10,11 +10,13 @@ interface HotspotProps {
   setActiveLayer: (layerId: string) => void;
   stageRef: React.RefObject<Konva.Stage | null>;
   stageSize: { width: number; height: number };
+  onMouseEnter: (e: Konva.KonvaEventObject<MouseEvent>, spot: any) => void;
+  onMouseLeave: (e: Konva.KonvaEventObject<MouseEvent>) => void;
 }
 
 
 export const ReactShape = (props: HotspotProps) => {
-  const { spot, setActiveLayer, activeLayer, stageSize } = props;
+  const { spot, setActiveLayer, activeLayer, stageSize, onMouseEnter, onMouseLeave } = props;
 
   const shapeRef = useRef<Konva.Rect | null>(null);
   const { x, y } = getSpotPosition(spot, activeLayer, stageSize);
@@ -26,6 +28,7 @@ export const ReactShape = (props: HotspotProps) => {
 
   const handleClick = () => {
     setActiveLayer(spot.target_layer_id);
+    onMouseLeave({} as any);
   }
 
   return (
@@ -39,7 +42,18 @@ export const ReactShape = (props: HotspotProps) => {
         stroke="red"
         strokeWidth={1}
         cornerRadius={2}
+        draggable={true}
         ref={(node) => (shapeRef.current = node as any)}
+        onMouseEnter={(e) => {
+          const container = e.target.getStage()?.container();
+          if (container) container.style.cursor = "pointer";
+          if (onMouseEnter) onMouseEnter(e, spot);
+        }}
+        onMouseLeave={(e) => {
+          const container = e.target.getStage()?.container();
+          if (container) container.style.cursor = "default";
+          if (onMouseLeave) onMouseLeave(e);
+        }}
       />
     </LongPressShape>
   );
