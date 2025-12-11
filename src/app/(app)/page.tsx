@@ -4,33 +4,39 @@ import { useEffect, useRef, useState } from "react";
 import ShowHotspot from "@/components/views/visualizer/ShowHotspot";
 import ShowLayer from "@/components/views/visualizer/ShowLayer";
 import { useVisualizerStore } from "@/stores/visualizerStore";
+import { useApp } from "@/stores/appStore";
 import { Stage } from "react-konva";
 import { View } from "@/components/ui/view/View";
 import { useVisualizerContext } from "@/context/VisualizerContext";
 
 
-export default function Home() {
+export default function VisualizerPage() {
 
   const { activeLayer, setActiveLayer, stageMode } = useVisualizerStore();
+  const { sideMenu } = useApp();
   const [stageSize, setStageSize] = useState({ width: 0, height: 0 });
 
   const { stageRef } = useVisualizerContext();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const updateSize = () => {
-      const cont = containerRef.current;
-      if (!cont || !activeLayer) return;
-      const maxW = cont.clientWidth;
-      const aspect = activeLayer.width / activeLayer.height;
-      const width = Math.min(maxW, 1900);
-      const height = Math.round(width / aspect);
-      setStageSize({ width, height });
-    };
-    updateSize();
-    window.addEventListener("resize", updateSize);
-    return () => window.removeEventListener("resize", updateSize);
-  }, [activeLayer]);
+    const container = containerRef.current;
+    if (!container) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        if (entry.contentRect) {
+          setStageSize({
+            width: entry.contentRect.width,
+            height: entry.contentRect.height,
+          });
+        }
+      }
+    });
+
+    resizeObserver.observe(container);
+    return () => resizeObserver.disconnect();
+  }, [activeLayer, sideMenu]);
 
 
   const handleStagePointerDown = () => {
@@ -47,7 +53,7 @@ export default function Home() {
   if (!activeLayer) return <div>Loading...</div>;
 
   return (
-    <View ref={containerRef}>
+    <View ref={containerRef} className="w-full h-full overflow-hidden">
       <Stage
         width={stageSize.width}
         height={stageSize.height}
