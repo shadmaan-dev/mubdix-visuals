@@ -8,7 +8,7 @@ export const spots = [
     height: 80,
     title: "Spot B",
     layer_id: "layer_1",
-    target_layer_id: "layer_2"
+    target_layer_id: "layer_3"
   },
   {
     id: "spot_2",

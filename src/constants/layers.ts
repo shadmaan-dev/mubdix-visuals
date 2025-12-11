@@ -19,11 +19,11 @@ export const layers = [
   },
   {
     id: "layer_3",
-    type: "image",
-    src: "/backgrounds/jobCenterPlusEntrance.jpeg",
+    type: "video",
+    src: "/video/ToG4S_Office.mp4",
     width: 1920,
     height: 1080,
-    title: "Job Center Plus Entrance",
+    title: "To G4S Office",
     project_id: "g4s_dwp_2023"
   },
 ]

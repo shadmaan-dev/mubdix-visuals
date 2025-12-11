@@ -26,13 +26,13 @@ export default function AppLayout({
   if (isLoading || !project) return <div>Loading...</div>;
 
   return (
-    <View className="flex">
+    <View className="flex w-full h-screen overflow-hidden">
       <VisualizerSidebar project={project} />
       <VisualizerProvider>
         <View className="flex flex-col w-full">
           <VisualizerHeader project={project} />
           <Container>
-            <main className="w-full h-full" id="app-container">{children}</main>
+            <main className="w-full h-full overflow-hidden" id="app-container">{children}</main>
           </Container>
         </View>
       </VisualizerProvider>
