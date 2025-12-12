@@ -9,14 +9,16 @@ interface HotspotProps {
   activeLayer: any;
   setActiveLayer: (layerId: string) => void;
   stageRef: React.RefObject<Konva.Stage | null>;
-  stageSize: { width: number; height: number };
   onMouseEnter: (e: Konva.KonvaEventObject<MouseEvent>, spot: any) => void;
   onMouseLeave: (e: Konva.KonvaEventObject<MouseEvent>) => void;
 }
 
 
 export const ReactShape = (props: HotspotProps) => {
-  const { spot, setActiveLayer, activeLayer, stageSize, onMouseEnter, onMouseLeave } = props;
+  const { spot, stageRef, setActiveLayer, activeLayer, onMouseEnter, onMouseLeave } = props;
+
+  const stage = stageRef.current;
+  const stageSize = stage?.size() || { width: 0, height: 0 };
 
   const shapeRef = useRef<Konva.Rect | null>(null);
   const { x, y } = getSpotPosition(spot, activeLayer, stageSize);

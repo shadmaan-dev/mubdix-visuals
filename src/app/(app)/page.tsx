@@ -1,20 +1,23 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import ShowHotspot from "@/components/views/visualizer/ShowHotspot";
-import ShowLayer from "@/components/views/visualizer/ShowLayer";
-import { useVisualizerStore } from "@/stores/visualizerStore";
 import { Stage } from "react-konva";
 import { View } from "@/components/ui/view/View";
 import { useVisualizerContext } from "@/context/VisualizerContext";
 
+import ShowHotspot from "@/components/views/visualizer/ShowHotspot";
+import ShowLayer from "@/components/views/visualizer/ShowLayer";
+import { useVisualizerStore } from "@/stores/visualizerStore";
+import { useApp } from "@/stores/appStore";
+import AddShapeForm from "@/components/views/visualizer/AddShapeForm";
 
 export default function VisualizerPage() {
 
-  const { activeLayer, setActiveLayer, stageMode } = useVisualizerStore();
   const [stageSize, setStageSize] = useState({ width: 0, height: 0 });
+  const onAddShape = useVisualizerStore((state) => state.onAddShape);
+  const setAppDrawer = useApp((state) => state.setAppDrawer);
 
-  const { stageRef } = useVisualizerContext();
+  const { stageRef, stageMode } = useVisualizerContext();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -34,21 +37,15 @@ export default function VisualizerPage() {
 
     resizeObserver.observe(container);
     return () => resizeObserver.disconnect();
-  }, [activeLayer]);
+  }, []);
 
-
-  const handleStagePointerDown = () => {
-    if (stageMode.mode === "draw") {
-      if (stageMode.action === "ADDSPOT") {
-        if (stageMode.metaData.shape === "rect") {
-
-        }
-      }
+  const handleStagePointerDown = (e: any) => {
+    if (stageMode.current.mode === 'edit' && stageMode.current.action === 'addShape') {
+      onAddShape(e, stageMode.current);
+      stageMode.current = { mode: 'view', action: null, metadata: null, };
+      setAppDrawer({ open: true, component: <AddShapeForm /> });
     }
-
   };
-
-  if (!activeLayer) return <div>Loading...</div>;
 
   return (
     <View ref={containerRef} className="relative w-full h-full overflow-hidden">
@@ -60,16 +57,8 @@ export default function VisualizerPage() {
           style={{ backgroundColor: "#222" }}
           onMouseDown={handleStagePointerDown}
         >
-          {
-            activeLayer && (
-              <>
-                <ShowLayer layer={activeLayer} />
-                {activeLayer?.spots && (
-                  <ShowHotspot spots={activeLayer.spots} activeLayer={activeLayer} setActiveLayer={setActiveLayer} stageSize={stageSize} />
-                )}
-              </>
-            )
-          }
+          <ShowLayer />
+          <ShowHotspot />
         </Stage>
       </div>
     </View>

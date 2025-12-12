@@ -3,22 +3,19 @@ import { Layer, Label, Tag, Text } from "react-konva";
 import { ReactShape } from "./shapes/ReactShape";
 import { useState } from "react";
 import Konva from "konva";
-
-interface ShowHotspotProps {
-  spots: any[];
-  activeLayer: any
-  setActiveLayer: (layerId: string) => void;
-  stageSize: { width: number; height: number };
-}
+import { useVisualizerStore } from "@/stores/visualizerStore";
 
 const shapeMap: any = {
   rect: ReactShape,
 }
 
-
-const ShowHotspot = (props: ShowHotspotProps) => {
-  const { spots, setActiveLayer, activeLayer, stageSize } = props;
+const ShowHotspot = () => {
   const { stageRef } = useVisualizerContext();
+  const activeLayer = useVisualizerStore((state) => state.activeLayer);
+  const setActiveLayer = useVisualizerStore((state) => state.setActiveLayer);
+  const { spots = [] } = activeLayer || {};
+  const stage = stageRef.current;
+
 
   const [tooltip, setTooltip] = useState<{
     visible: boolean;
@@ -61,7 +58,6 @@ const ShowHotspot = (props: ShowHotspotProps) => {
               activeLayer={activeLayer}
               setActiveLayer={setActiveLayer}
               stageRef={stageRef}
-              stageSize={stageSize}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             />

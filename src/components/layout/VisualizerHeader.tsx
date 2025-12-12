@@ -7,14 +7,14 @@ import { useApp } from "@/stores/appStore";
 import { useVisualizerContext } from "@/context/VisualizerContext";
 import Konva from "konva";
 
-import { Menu } from "lucide-react";
+import { Circle, Menu, Square, ZoomIn, ZoomOut } from "lucide-react";
 
 interface VisualizerHeaderProps {
   project: any;
 }
 
 const VisualizerHeader = ({ project }: VisualizerHeaderProps) => {
-  const { stageRef, layerRef } = useVisualizerContext();
+  const { stageRef, layerRef, stageMode } = useVisualizerContext();
   const { toggleSideMenu, sideMenu } = useApp();
   const [windowWidth, setWindowWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
 
@@ -59,25 +59,14 @@ const VisualizerHeader = ({ project }: VisualizerHeaderProps) => {
     layerRef.current?.batchDraw();
   }
 
-  const addRect = () => {
-    const stage = stageRef.current;
-    if (!stage) return;
-    const layer = layerRef.current;
-    if (!layer) return;
-    const rect = new Konva.Rect({
-      x: 100,
-      y: 100,
-      width: 100,
-      height: 100,
-      opacity: 0.5,
-      stroke: "red",
-      strokeWidth: 2,
-      draggable: true,
-      resizable: true,
-      cornerRadius: 5,
-    });
-    layer.add(rect);
-    layer.batchDraw();
+  const addShape = (type: string) => {
+    stageMode.current = {
+      mode: "edit",
+      action: "addShape",
+      metadata: {
+        type: type,
+      }
+    }
   }
 
   return (
@@ -88,9 +77,11 @@ const VisualizerHeader = ({ project }: VisualizerHeaderProps) => {
         ><Menu /></button>
       </View>
       <View className="flex gap-4 items-center">
-        <button onClick={() => handleZoom(1 / SCALE_STEP)}>Zoom Out</button>
-        <button onClick={() => handleZoom(SCALE_STEP)}>Zoom In</button>
-        <button onClick={addRect}>Add Rect</button>
+
+        <button onClick={() => addShape("rect")}><Square /></button>
+        <button onClick={() => addShape("circle")}><Circle /></button>
+        <button onClick={() => handleZoom(1 / SCALE_STEP)}> <ZoomOut /></button>
+        <button onClick={() => handleZoom(SCALE_STEP)}><ZoomIn /></button>
       </View>
     </View>
   );

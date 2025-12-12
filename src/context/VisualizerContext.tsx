@@ -12,6 +12,7 @@ import Konva from "konva";
 export interface IVisualizerContext {
   stageRef: React.RefObject<Konva.Stage | null>;
   layerRef: React.RefObject<Konva.Layer | null>;
+  stageMode: React.RefObject<{ mode: string; action: string | null; metadata: any; }>;
 }
 
 const VisualizerContext = createContext<IVisualizerContext | null>(null);
@@ -26,10 +27,16 @@ export const VisualizerProvider: React.FC<VisualizerProviderProps> = ({
 
   const stageRef = useRef<Konva.Stage | null>(null);
   const layerRef = useRef<Konva.Layer | null>(null);
+  const stageMode = useRef<{ mode: string; action: string | null; metadata: any; }>({
+    mode: "view",
+    action: null,
+    metadata: null,
+  })
 
   const context: IVisualizerContext = {
     stageRef,
-    layerRef
+    layerRef,
+    stageMode,
   };
 
   return (

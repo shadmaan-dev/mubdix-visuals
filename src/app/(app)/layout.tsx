@@ -1,6 +1,7 @@
 "use client";
 
 import Container from "@/components/layout/Container";
+import RightDrawer from "@/components/layout/RightDrawer";
 import VisualizerHeader from "@/components/layout/VisualizerHeader";
 import VisualizerSidebar from "@/components/layout/VisualizerSidebar";
 import { View } from "@/components/ui/view/View";
@@ -32,7 +33,14 @@ export default function AppLayout({
         <View className="flex flex-col w-full">
           <VisualizerHeader project={project} />
           <Container>
-            <main className="w-full h-full overflow-hidden" id="app-container">{children}</main>
+            <main className="flex w-full h-full">
+              <View className="flex w-full h-full overflow-hidden">
+                {children}
+              </View>
+              <View className="relative">
+                <RightDrawer />
+              </View>
+            </main>
           </Container>
         </View>
       </VisualizerProvider>

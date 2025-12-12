@@ -1,3 +1,5 @@
+import MenuItem from "@/components/ui/menu/MenuItem";
+
 interface LayerMenuProps {
   layers: any[];
   setActiveLayer: (layer: any) => void;
@@ -7,9 +9,9 @@ interface LayerMenuProps {
 const LayerMenu = (props: LayerMenuProps) => {
   const { layers, setActiveLayer } = props;
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-1">
       {layers.map((l) => (
-        <button key={l.id} onClick={() => setActiveLayer(l.id)} className="p-2 border border-gray-300 rounded">{l.title}</button>
+        <MenuItem size="sm" key={l.id} label={l.title} onClick={() => setActiveLayer(l.id)} />
       ))}
     </div>
   );

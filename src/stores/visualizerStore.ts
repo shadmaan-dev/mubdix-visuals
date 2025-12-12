@@ -1,5 +1,6 @@
 "use client";
 
+import { getShapeData } from "@/utils/visualizer";
 import { create } from "zustand";
 
 interface LayerType {
@@ -18,11 +19,7 @@ interface VisualizerStore {
   setLayers: (layers: LayerType[]) => void;
   activeLayer: LayerType | null;
   setActiveLayer: (layer_id: string) => void;
-  stageMode: {
-    mode: "view" | "draw" | "select";
-    action: "ADDSPOT" | null;
-    metaData: any;
-  }
+  onAddShape: (event: any, stageMode: any) => void;
 }
 
 
@@ -41,9 +38,13 @@ export const useVisualizerStore = create<VisualizerStore>((set) => ({
       return { activeLayer: layer };
     });
   },
-  stageMode: {
-    mode: "view",
-    action: null,
-    metaData: null,
+  onAddShape: (event: any, stageMode: any) => {
+    set((state) => {
+      if (!state.activeLayer) return state;
+      const spots = state.activeLayer.spots || [];
+      const shapeData = getShapeData(event.currentTarget.pointerPos, stageMode.metadata);
+      const newSpots = [...spots, shapeData];
+      return { activeLayer: { ...state.activeLayer, spots: newSpots } };
+    });
   },
 }));

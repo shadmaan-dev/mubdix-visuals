@@ -5,35 +5,34 @@ import { LayerType } from "@/types/visualizer";
 import Konva from "konva";
 import { Layer, Image } from "react-konva";
 import { useEffect, useState } from "react";
+import { useVisualizerStore } from "@/stores/visualizerStore";
 
-interface ShowLayerProps {
-  layer: LayerType;
-}
 
-const ShowLayer = (props: ShowLayerProps) => {
+const ShowLayer = () => {
   const { stageRef, layerRef } = useVisualizerContext();
-  const { layer } = props;
+  const activeLayer = useVisualizerStore((state) => state.activeLayer);
   const stage = stageRef.current;
 
   const [element, setElement] = useState<HTMLImageElement | HTMLVideoElement | null>(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    if (!activeLayer) return;
     let el: HTMLImageElement | HTMLVideoElement;
 
-    if (layer.type === "image") {
+    if (activeLayer.type === "image") {
       el = document.createElement("img");
       el.onload = () => {
         setLoaded(true);
       };
-      el.src = layer.src;
+      el.src = activeLayer.src;
       el.crossOrigin = "anonymous";
     } else {
       el = document.createElement("video");
       el.onloadedmetadata = () => {
         setLoaded(true);
       };
-      el.src = layer.src;
+      el.src = activeLayer.src;
       el.crossOrigin = "anonymous";
       el.muted = true;
       el.autoplay = true;
@@ -54,7 +53,7 @@ const ShowLayer = (props: ShowLayerProps) => {
       }
     };
 
-  }, [layer.src, layer.type]);
+  }, [activeLayer]);
 
   // Video Animation Loop
   useEffect(() => {
