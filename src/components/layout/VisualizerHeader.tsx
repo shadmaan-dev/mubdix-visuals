@@ -7,7 +7,9 @@ import { useApp } from "@/stores/appStore";
 import { useVisualizerContext } from "@/context/VisualizerContext";
 import Konva from "konva";
 
-import { Circle, Menu, Square, ZoomIn, ZoomOut } from "lucide-react";
+import { Circle, Menu, Square, ZoomIn, ZoomOut, Image as ImageIcon } from "lucide-react";
+import Typography from "../ui/typography/Typography";
+import { useVisualizerStore } from "@/stores/visualizerStore";
 
 interface VisualizerHeaderProps {
   project: any;
@@ -17,6 +19,7 @@ const VisualizerHeader = ({ project }: VisualizerHeaderProps) => {
   const { stageRef, layerRef, stageMode } = useVisualizerContext();
   const { toggleSideMenu, sideMenu } = useApp();
   const [windowWidth, setWindowWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
+  const activeLayer = useVisualizerStore((state) => state.activeLayer);
 
 
   const handleToggle = () => {
@@ -71,14 +74,20 @@ const VisualizerHeader = ({ project }: VisualizerHeaderProps) => {
 
   return (
     <View className="surface-inset flex justify-between bg-secondary items-center border-b border-default h-14 px-4">
-      <View>
+      <View className="flex gap-4 items-center">
         <button
           onClick={handleToggle}
         ><Menu /></button>
+
+        <View>
+          <Typography variant="h6" >{project?.title}</Typography>
+          <Typography variant="h6" >{activeLayer?.title}</Typography>
+        </View>
       </View>
       <View className="flex gap-4 items-center">
 
         <button onClick={() => addShape("rect")}><Square /></button>
+        <button onClick={() => addShape("icon")}><ImageIcon /></button>
         <button onClick={() => addShape("circle")}><Circle /></button>
         <button onClick={() => handleZoom(1 / SCALE_STEP)}> <ZoomOut /></button>
         <button onClick={() => handleZoom(SCALE_STEP)}><ZoomIn /></button>

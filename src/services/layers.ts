@@ -18,3 +18,9 @@ export const createUpdateSpot = async (spot: any) => {
   const { data } = await supabase.from("visual_spots").upsert([spot], { onConflict: "id" });
   return data
 };
+
+export const deleteSpot = async (spotId: string) => {
+  const supabase = supabaseClient();
+  const { data } = await supabase.from("visual_spots").delete().eq("id", spotId);
+  return data
+};

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createLayer, createUpdateSpot, getLayers } from "../services/layers";
+import { createLayer, createUpdateSpot, deleteSpot, getLayers } from "../services/layers";
 
 export const useLayers = () =>
   useQuery({
@@ -17,5 +17,12 @@ export const useCreateLayer = () => {
 export const useCreateUpdateSpot = () => {
   return useMutation({
     mutationFn: createUpdateSpot
+  });
+};
+
+
+export const useDeleteSpot = () => {
+  return useMutation({
+    mutationFn: deleteSpot
   });
 };

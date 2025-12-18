@@ -1,12 +1,14 @@
 import { useVisualizerContext } from "@/context/VisualizerContext";
 import { Layer, Label, Tag, Text } from "react-konva";
 import { ReactShape } from "./shapes/ReactShape";
+import { ReactIcon } from "./shapes/ReactIcon";
 import { useState } from "react";
 import Konva from "konva";
 import { useVisualizerStore } from "@/stores/visualizerStore";
 
 const shapeMap: any = {
   rect: ReactShape,
+  icon: ReactIcon,
 }
 
 const ShowHotspot = () => {

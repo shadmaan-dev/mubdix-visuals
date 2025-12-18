@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo } from "react";
-import { useCreateUpdateSpot } from "@/hooks/layers";
+import { useCreateUpdateSpot, useDeleteSpot } from "@/hooks/layers";
 import { Controller, useForm } from "react-hook-form";
 import { View } from "@/components/ui/view/View";
 import Typography from "@/components/ui/typography/Typography";
@@ -12,6 +12,8 @@ import TextField from "@/components/ui/fields/text/TextField";
 import { useVisualizerStore } from "@/stores/visualizerStore";
 import SelectField from "@/components/ui/fields/select/SelectField";
 import SliderField from "@/components/ui/fields/slider/SliderField";
+import MediaSelector from "@/components/gallery/MediaSelector";
+import IconSelector from "@/components/gallery/IconSelector";
 
 const AddShapeForm = () => {
   const setAppDrawer = useApp((state) => state.setAppDrawer);
@@ -21,6 +23,7 @@ const AddShapeForm = () => {
   const updateActiveSpot = useVisualizerStore((state) => state.updateActiveSpot);
 
   const createUpdateSpot = useCreateUpdateSpot();
+  const deleteSpot = useDeleteSpot();
 
   const activeSpot = (activeSpotIndex || activeSpotIndex === 0) ? spots[activeSpotIndex] : {};
 
@@ -74,6 +77,20 @@ const AddShapeForm = () => {
               <TextField label="Title" {...field} invalid={!!errors.title} />
             )}
           />
+
+          {activeSpot.type === 'icon' && (
+            <Controller
+              name="meta_data.src"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <IconSelector {...field} name="src" >
+                  <Typography variant="body2" className="text-gray-500">Select Icon</Typography>
+                </IconSelector>
+              )}
+            />
+          )}
+
           <Controller
             name="target_layer_id"
             control={control}
@@ -118,7 +135,12 @@ const AddShapeForm = () => {
           />
 
         </View>
-        <View className="mt-4">
+        <View className="flex gap-2 mt-4">
+          <Button
+            variant="outlined"
+            size="md" label="Remove"
+            onClick={() => deleteSpot.mutate(activeSpot.id)}
+            className="w-full hover:bg-gray-500 hover:text-white" />
           <Button
             variant="solid"
             size="md" label="Save"

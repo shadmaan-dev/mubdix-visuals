@@ -1,4 +1,5 @@
 import MenuItem from "@/components/ui/menu/MenuItem";
+import { Layers } from 'lucide-react';
 
 interface LayerMenuProps {
   layers: any[];
@@ -11,7 +12,7 @@ const LayerMenu = (props: LayerMenuProps) => {
   return (
     <div className="flex flex-col gap-1">
       {layers.map((l) => (
-        <MenuItem size="sm" key={l.id} label={l.title} onClick={() => setActiveLayer(l.id)} />
+        <MenuItem size="sm" leftIcon={<Layers />} key={l.id} label={l.title} onClick={() => setActiveLayer(l.id)} />
       ))}
     </div>
   );

@@ -24,4 +24,14 @@ export const getMetaDataSpot = (event: any, stageMode: any) => {
       y: pointerPos.y,
     }
   }
+
+  if (metadata.type === "icon") {
+    return {
+      width: 50,
+      height: 50,
+      x: pointerPos.x,
+      y: pointerPos.y,
+      src: "",
+    }
+  }
 }
