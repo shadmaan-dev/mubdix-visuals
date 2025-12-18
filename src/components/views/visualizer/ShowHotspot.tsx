@@ -11,9 +11,10 @@ const shapeMap: any = {
 
 const ShowHotspot = () => {
   const { stageRef } = useVisualizerContext();
+  const spots = useVisualizerStore((state) => state.spots);
   const activeLayer = useVisualizerStore((state) => state.activeLayer);
   const setActiveLayer = useVisualizerStore((state) => state.setActiveLayer);
-  const { spots = [] } = activeLayer || {};
+
   const stage = stageRef.current;
 
 

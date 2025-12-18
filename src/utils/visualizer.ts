@@ -1,38 +1,27 @@
 export const getSpotPosition = (spot: any, activeLayer: any, stageSize: any) => {
-  const x = (spot.x / activeLayer.width) * stageSize?.width;
-  const y = (spot.y / activeLayer.height) * stageSize?.height;
-  return { x, y };
+  const { x = 0, y = 0 } = spot.meta_data;
+  const cx = (x / activeLayer.width) * stageSize?.width;
+  const cy = (y / activeLayer.height) * stageSize?.height;
+  return { x: cx, y: cy };
 }
 
 export const getSpotSize = (spot: any, activeLayer: any, stageSize: any) => {
-  const width = (spot.width / activeLayer.width) * stageSize?.width;
-  const height = (spot.height / activeLayer.height) * stageSize?.height;
-  return { width, height };
+  const { width = 0, height = 0 } = spot.meta_data;
+  const cw = (width / activeLayer.width) * stageSize?.width;
+  const ch = (height / activeLayer.height) * stageSize?.height;
+  return { width: cw, height: ch };
 };
 
-export const getShapeData = (pointerPos: any, metadata: any) => {
-  let shapeData: any = {
-    id: "spot_3",
-    type: metadata.type,
-    title: "Spot B",
-    layer_id: "layer_1",
-    x: pointerPos.x,
-    y: pointerPos.y,
-  };
+export const getMetaDataSpot = (event: any, stageMode: any) => {
+  const { pointerPos } = event.currentTarget;
+  const { metadata } = stageMode;
+
   if (metadata.type === "rect") {
-    shapeData = {
-      ...shapeData,
+    return {
       width: 100,
       height: 100,
+      x: pointerPos.x,
+      y: pointerPos.y,
     }
   }
-
-  if (metadata.type === "circle") {
-    shapeData = {
-      ...shapeData,
-      radius: 50,
-    }
-  }
-
-  return shapeData;
 }

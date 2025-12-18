@@ -3,6 +3,9 @@ import LongPressShape from "./LongPressShape";
 import { Rect } from "react-konva";
 import { getSpotPosition, getSpotSize } from "@/utils/visualizer";
 import { useRef } from "react";
+import { useVisualizerStore } from "@/stores/visualizerStore";
+import { useApp } from "@/stores/appStore";
+import AddShapeForm from "../AddShapeForm";
 
 interface HotspotProps {
   spot: any;
@@ -16,6 +19,9 @@ interface HotspotProps {
 
 export const ReactShape = (props: HotspotProps) => {
   const { spot, stageRef, setActiveLayer, activeLayer, onMouseEnter, onMouseLeave } = props;
+  const setActiveSpotIndex = useVisualizerStore((state) => state.setActiveSpotIndex);
+  const setAppDrawer = useApp((state) => state.setAppDrawer);
+
 
   const stage = stageRef.current;
   const stageSize = stage?.size() || { width: 0, height: 0 };
@@ -24,11 +30,14 @@ export const ReactShape = (props: HotspotProps) => {
   const { x, y } = getSpotPosition(spot, activeLayer, stageSize);
   const { width, height } = getSpotSize(spot, activeLayer, stageSize);
 
-  const handleLongPress = () => {
 
+  const handleLongPress = () => {
+    setActiveSpotIndex(spot.id);
+    setAppDrawer({ open: true, component: <AddShapeForm /> });
   }
 
   const handleClick = () => {
+    if (!spot.target_layer_id) return;
     setActiveLayer(spot.target_layer_id);
     onMouseLeave({} as any);
   }
