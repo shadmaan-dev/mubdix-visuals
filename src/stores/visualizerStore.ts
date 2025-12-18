@@ -24,6 +24,7 @@ interface VisualizerStore {
   setActiveLayer: (layer_id: string) => void;
   setSpots: (spots: any[]) => void;
   setActiveSpotIndex: (spot_id: string) => void;
+  updateActiveSpot: (updatedSpot: any) => void;
   onAddShape: (event: any, stageMode: any) => void;
 }
 
@@ -71,10 +72,19 @@ export const useVisualizerStore = create<VisualizerStore>((set) => ({
         title: 'Spot ' + (spots.length + 1),
         type: stageMode.metadata.type,
         layer_id: state.activeLayer.id,
-        target_layer_id: null,
+        target_layer_id: '',
         meta_data: spotMetaData,
       }];
       return { spots: newSpots, activeSpotIndex: newSpots.length - 1 };
+    });
+  },
+  updateActiveSpot: (updatedSpot: any) => {
+    set((state) => {
+      const spots = state.spots;
+      const index = spots.findIndex((spot) => spot.id === updatedSpot.id);
+      const updatedSpots = [...spots];
+      updatedSpots[index] = updatedSpot;
+      return { spots: updatedSpots };
     });
   },
 }));

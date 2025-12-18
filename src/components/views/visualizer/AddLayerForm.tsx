@@ -23,7 +23,7 @@ const AddLayerForm = () => {
     defaultValues: {
       title: "",
       src: "",
-      type: "image",
+      type: "video",
       width: 1920,
       height: 1024,
       project_id: "346d0205-8154-4062-a079-1682d1637c66",

@@ -20,6 +20,7 @@ interface HotspotProps {
 export const ReactShape = (props: HotspotProps) => {
   const { spot, stageRef, setActiveLayer, activeLayer, onMouseEnter, onMouseLeave } = props;
   const setActiveSpotIndex = useVisualizerStore((state) => state.setActiveSpotIndex);
+  const updateActiveSpot = useVisualizerStore((state) => state.updateActiveSpot);
   const setAppDrawer = useApp((state) => state.setAppDrawer);
 
 
@@ -53,7 +54,7 @@ export const ReactShape = (props: HotspotProps) => {
         stroke="red"
         strokeWidth={1}
         cornerRadius={2}
-        draggable={true}
+        draggable={false}
         ref={(node) => (shapeRef.current = node as any)}
         onMouseEnter={(e) => {
           const container = e.target.getStage()?.container();
@@ -64,6 +65,9 @@ export const ReactShape = (props: HotspotProps) => {
           const container = e.target.getStage()?.container();
           if (container) container.style.cursor = "default";
           if (onMouseLeave) onMouseLeave(e);
+        }}
+        onDragEnd={(e) => {
+          updateActiveSpot({ ...spot, meta_data: { ...spot.meta_data, x: e.target.x(), y: e.target.y() } });
         }}
       />
     </LongPressShape>

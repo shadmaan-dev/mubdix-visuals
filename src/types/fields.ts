@@ -5,3 +5,9 @@ export interface FieldProps
   label?: string;
   invalid?: boolean;
 }
+
+export interface SelectFieldProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  label?: string;
+  invalid?: boolean;
+  options: { label: string; value: string }[];
+}

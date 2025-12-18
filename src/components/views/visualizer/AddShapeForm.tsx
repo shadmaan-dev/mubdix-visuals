@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { useCreateUpdateSpot } from "@/hooks/layers";
 import { Controller, useForm } from "react-hook-form";
 import { View } from "@/components/ui/view/View";
@@ -10,23 +10,42 @@ import { useApp } from "@/stores/appStore";
 import { X } from "lucide-react";
 import TextField from "@/components/ui/fields/text/TextField";
 import { useVisualizerStore } from "@/stores/visualizerStore";
+import SelectField from "@/components/ui/fields/select/SelectField";
+import SliderField from "@/components/ui/fields/slider/SliderField";
 
 const AddShapeForm = () => {
   const setAppDrawer = useApp((state) => state.setAppDrawer);
+  const layers = useVisualizerStore((state) => state.layers);
   const spots = useVisualizerStore((state) => state.spots);
   const activeSpotIndex = useVisualizerStore((state) => state.activeSpotIndex);
+  const updateActiveSpot = useVisualizerStore((state) => state.updateActiveSpot);
 
   const createUpdateSpot = useCreateUpdateSpot();
 
   const activeSpot = (activeSpotIndex || activeSpotIndex === 0) ? spots[activeSpotIndex] : {};
 
+  const layerOptions = useMemo(() => {
+    return layers.map((layer) => ({
+      label: layer.title,
+      value: layer.id,
+    }));
+  }, [layers]);
+
   const {
     handleSubmit,
     control,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: activeSpot,
   });
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      updateActiveSpot({ ...activeSpot, ...value });
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, activeSpot, updateActiveSpot]);
 
   const onSubmit = (data: any) => {
     createUpdateSpot.mutate(data);
@@ -45,8 +64,8 @@ const AddShapeForm = () => {
           className="border-0 hover:bg-gray-500 hover:text-white"
         />
       </View>
-      <View>
-        <View>
+      <View className="p-2">
+        <View className="flex flex-col gap-2">
           <Controller
             name="title"
             control={control}
@@ -55,8 +74,51 @@ const AddShapeForm = () => {
               <TextField label="Title" {...field} invalid={!!errors.title} />
             )}
           />
+          <Controller
+            name="target_layer_id"
+            control={control}
+            rules={{ required: false }}
+            render={({ field }) => (
+              <SelectField label="Select Target Layer" options={layerOptions} {...field} invalid={!!errors.target_layer_id} />
+            )}
+          />
+
+          <Controller
+            name="meta_data.width"
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <SliderField label="Width" {...field} invalid={!!(errors.meta_data as any)?.width} />
+            )}
+          />
+          <Controller
+            name="meta_data.height"
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <SliderField label="Height" {...field} invalid={!!(errors.meta_data as any)?.height} />
+            )}
+          />
+
+          <Controller
+            name="meta_data.x"
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <SliderField label="X" max={1920} {...field} invalid={!!(errors.meta_data as any)?.x} />
+            )}
+          />
+          <Controller
+            name="meta_data.y"
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <SliderField label="Y" max={1024} {...field} invalid={!!(errors.meta_data as any)?.y} />
+            )}
+          />
+
         </View>
-        <View>
+        <View className="mt-4">
           <Button
             variant="solid"
             size="md" label="Save"
