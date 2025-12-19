@@ -57,18 +57,16 @@ const AddShapeForm = () => {
 
   return (
     <View>
-      <View className="flex items-center justify-between border-b border-default px-2 py-2 bg-gray-600">
+      <View className="flex items-center justify-between border-b border-default pl-4 pr-2 py-2 bg-gray-600">
         <Typography variant="h6" className="text-white">Add Spot</Typography>
         <Button
-          variant="outlined"
-          size="xs" label=""
-          leftIcon={<X size={18} color="white" />}
+          variant="ghost"
+          size="xs"
           onClick={() => setAppDrawer({ open: false, component: null })}
-          className="border-0 hover:bg-gray-500 hover:text-white"
-        />
+          className="hover:bg-gray-500 hover:text-white"><X size={18} color="white" /></Button>
       </View>
       <View className="p-2">
-        <View className="flex flex-col gap-2">
+        <View className="flex flex-col gap-4">
           <Controller
             name="title"
             control={control}
@@ -122,7 +120,7 @@ const AddShapeForm = () => {
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <SliderField label="X" max={1920} {...field} invalid={!!(errors.meta_data as any)?.x} />
+              <SliderField label="X-Axis" max={1920} {...field} invalid={!!(errors.meta_data as any)?.x} />
             )}
           />
           <Controller
@@ -130,7 +128,7 @@ const AddShapeForm = () => {
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <SliderField label="Y" max={1024} {...field} invalid={!!(errors.meta_data as any)?.y} />
+              <SliderField label="Y-Axis" max={1024} {...field} invalid={!!(errors.meta_data as any)?.y} />
             )}
           />
 

@@ -5,8 +5,8 @@ const SelectField = (props: SelectFieldProps) => {
   const { label, options, invalid, ...rest } = props;
   return (
     <div className="flex flex-col gap-1">
-      <label>{label}</label>
-      <select className="border border-default rounded-md p-2" {...rest}>
+      <label className="text-sm font-semibold">{label}</label>
+      <select className="text-sm border border-default rounded-md py-1.5 px-2" {...rest}>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}

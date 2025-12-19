@@ -24,3 +24,25 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+input[type='range'] {
+  accent-color: #4a5565;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 25px;
+  border-radius: 5px;
+  background: #4a5565;
+  cursor: pointer;
+}
+
+input[type=range]::-moz-range-thumb {
+  width: 15px;
+  height: 25px;
+  background: #4a5565;
+  cursor: pointer;
+}

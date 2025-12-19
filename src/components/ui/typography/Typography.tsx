@@ -55,7 +55,7 @@ const Typography = ({
     h5: "text-lg font-semibold tracking-tight",
     h6: "text-base font-semibold tracking-tight",
     subtitle1: "text-lg font-medium leading-none",
-    subtitle2: "text-sm font-medium leading-none",
+    subtitle2: "text-sm font-bold leading-none",
     body1: "text-base leading-7",
     body2: "text-sm leading-6",
     caption: "text-xs text-muted-foreground",

@@ -24,6 +24,8 @@ export default function AppLayout({
     }
   }, [projects]);
 
+  if (!project) return <div>Loading...</div>;
+
   return (
     <View className="flex w-full h-screen overflow-hidden">
       <VisualizerSidebar project={project} />

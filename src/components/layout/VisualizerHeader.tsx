@@ -10,6 +10,7 @@ import Konva from "konva";
 import { Circle, Menu, Square, ZoomIn, ZoomOut, Image as ImageIcon } from "lucide-react";
 import Typography from "../ui/typography/Typography";
 import { useVisualizerStore } from "@/stores/visualizerStore";
+import Button from "../ui/button/Button";
 
 interface VisualizerHeaderProps {
   project: any;
@@ -75,22 +76,20 @@ const VisualizerHeader = ({ project }: VisualizerHeaderProps) => {
   return (
     <View className="surface-inset flex justify-between bg-secondary items-center border-b border-default h-14 px-4">
       <View className="flex gap-4 items-center">
-        <button
-          onClick={handleToggle}
-        ><Menu /></button>
-
-        <View>
-          <Typography variant="h6" >{project?.title}</Typography>
-          <Typography variant="h6" >{activeLayer?.title}</Typography>
+        <Button size="sm" onClick={handleToggle} variant="solid"><Menu size={18} /></Button>
+        <View className="flex flex-col gap-1">
+          <Typography variant="subtitle2" >{project?.title}</Typography>
+          <Typography variant="caption" >{activeLayer?.title}</Typography>
         </View>
       </View>
-      <View className="flex gap-4 items-center">
+      <View className="flex gap-2 items-center">
 
-        <button onClick={() => addShape("rect")}><Square /></button>
-        <button onClick={() => addShape("icon")}><ImageIcon /></button>
-        <button onClick={() => addShape("circle")}><Circle /></button>
-        <button onClick={() => handleZoom(1 / SCALE_STEP)}> <ZoomOut /></button>
-        <button onClick={() => handleZoom(SCALE_STEP)}><ZoomIn /></button>
+        <Button variant="ghost" size="xs" onClick={() => addShape("rect")}><Square size={20} /></Button>
+        {/* <Button onClick={() => addShape("icon")}><ImageIcon /></Button> */}
+        {/* <Button onClick={() => addShape("circle")}><Circle /></Button> */}
+        <View className="w-0.5 h-4 bg-gray-500" />
+        <Button variant="ghost" size="xs" onClick={() => handleZoom(1 / SCALE_STEP)}> <ZoomOut size={20} /></Button>
+        <Button variant="ghost" size="xs" onClick={() => handleZoom(SCALE_STEP)}><ZoomIn size={20} /></Button>
       </View>
     </View>
   );

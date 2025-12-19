@@ -7,11 +7,11 @@ import LayerMenu from "./LayerMenu";
 import Drawer from "./Drawer";
 import { View } from "../ui/view/View";
 import AppLogo from "./AppLogo";
-import { useApp } from "@/stores/appStore";
-import AddLayerForm from "../views/visualizer/AddLayerForm";
-import Button from "@/components/ui/button/Button";
-import { PlusIcon } from "lucide-react";
+import { ChevronRightIcon, UserIcon } from "lucide-react";
 import SearchField from "../ui/fields/search/SearchField";
+import SideBarFooter from "./SideBarFooter";
+import MenuItem from "../ui/menu/MenuItem";
+import { useRouter } from "next/navigation";
 
 interface VisualizerSidebarProps {
   project: any;
@@ -19,33 +19,28 @@ interface VisualizerSidebarProps {
 
 const VisualizerSidebar = ({ project }: VisualizerSidebarProps) => {
 
-  const { data: layers } = useLayers();
-  const setAppDrawer = useApp((state) => state.setAppDrawer);
-  const { setLayers, setActiveLayer } = useVisualizerStore();
-
-  useEffect(() => {
-    if (layers) {
-      setLayers(layers as any);
-    }
-  }, [layers]);
-
-  const handleAddLayer = () => {
-    setAppDrawer({ open: true, component: <AddLayerForm /> });
-  };
-
-  if (!layers) return <div>Loading...</div>;
+  const router = useRouter();
 
   return (
     <Drawer>
-      <View>
-        <View className="flex items-center border-b border-default">
+      <View className="flex flex-col h-full">
+        <View className="flex items-center border-b">
           <AppLogo />
         </View>
-        <View className="flex items-center gap-2 px-2 py-4">
-          <SearchField size="sm" />
-          <Button label="" size="sm" leftIcon={<PlusIcon size={14} />} variant="outlined" severity="primary" onClick={handleAddLayer} />
+        <View className="flex-1 overflow-y-auto">
+          <LayerMenu />
         </View>
-        <LayerMenu layers={layers as any} setActiveLayer={setActiveLayer} />
+        <View>
+          <MenuItem
+            leftIcon={<UserIcon size={14} />}
+            rightIcon={<ChevronRightIcon size={14} />}
+            label="Administrator"
+            onClick={() => router.push("/admin")}
+          />
+        </View>
+        <View className="flex h-14 items-center border-t">
+          <SideBarFooter />
+        </View>
       </View>
     </Drawer>
   );

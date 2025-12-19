@@ -7,7 +7,11 @@ import { Controller, useForm } from "react-hook-form";
 import TextField from "@/components/ui/fields/text/TextField";
 import { supabaseClient } from "@/services/supabase/client";
 
+import { useRouter } from "next/navigation";
+
 const LoginPage = () => {
+  const router = useRouter(); // Initialize router
+
   const {
     handleSubmit,
     control,
@@ -29,7 +33,7 @@ const LoginPage = () => {
         console.log(res.error);
       }
       if (res.data.session) {
-        console.log(res.data.session);
+        router.push("/");
       }
     }).catch((err) => {
       console.log(err);
