@@ -23,7 +23,7 @@ const MenuItem = ({
   onClick,
   ...props
 }: MenuItemProps) => {
-  const baseStyles = "flex items-center w-full cursor-pointer rounded-md transition-colors duration-150 ease-in-out select-none";
+  const baseStyles = "flex items-center w-full cursor-pointer transition-colors duration-150 ease-in-out select-none";
   const activeStyles = active ? "bg-gray-100 text-gray-900 font-medium" : "text-gray-700 hover:bg-gray-50 hover:text-gray-900";
   const disabledStyles = disabled ? "opacity-50 pointer-events-none" : "";
 

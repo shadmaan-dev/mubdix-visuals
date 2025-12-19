@@ -65,7 +65,7 @@ const AddShapeForm = () => {
           onClick={() => setAppDrawer({ open: false, component: null })}
           className="hover:bg-gray-500 hover:text-white"><X size={18} color="white" /></Button>
       </View>
-      <View className="p-2">
+      <View className="p-4">
         <View className="flex flex-col gap-4">
           <Controller
             name="title"
@@ -133,15 +133,18 @@ const AddShapeForm = () => {
           />
 
         </View>
-        <View className="flex gap-2 mt-4">
+        <View className="flex gap-2 mt-6">
           <Button
-            variant="outlined"
-            size="md" label="Remove"
+            variant="solid"
+            security="danger"
+            size="md"
+            label="Remove"
             onClick={() => deleteSpot.mutate(activeSpot.id)}
             className="w-full hover:bg-gray-500 hover:text-white" />
           <Button
             variant="solid"
-            size="md" label="Save"
+            size="md"
+            label="Save"
             onClick={handleSubmit(onSubmit)}
             className="w-full hover:bg-gray-500 hover:text-white"
           />

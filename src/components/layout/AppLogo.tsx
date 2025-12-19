@@ -9,7 +9,7 @@ const AppLogo = () => {
   return (
     <>
       {sideMenu === "toggled" ? (
-        <View className="justify-center flex items-center h-14 w-full px-2  surface-inset">
+        <View className="justify-center flex items-center h-12 w-full px-2  surface-inset">
           <Image
             src="/logo.png"
             alt="Logo"

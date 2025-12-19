@@ -74,7 +74,7 @@ const VisualizerHeader = ({ project }: VisualizerHeaderProps) => {
   }
 
   return (
-    <View className="surface-inset flex justify-between bg-secondary items-center border-b border-default h-14 px-4">
+    <View className="surface-inset flex justify-between bg-secondary items-center border-b border-slate-200 h-12 px-4">
       <View className="flex gap-4 items-center">
         <Button size="sm" onClick={handleToggle} variant="solid"><Menu size={18} /></Button>
         <View className="flex flex-col gap-1">

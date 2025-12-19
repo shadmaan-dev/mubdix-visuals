@@ -17,7 +17,7 @@ const Drawer = ({ children }: DrawerProps) => {
   return (
     <View
       className={clsx(
-        "three-dim h-screen overflow-hidden transition-all duration-300 border-r border-default",
+        "three-dim h-screen overflow-hidden transition-all duration-300 border-r border-slate-200",
         {
           "w-70 max-w-70 min-w-70": sideMenu === "toggled",
           "w-15 max-w-15 min-w-15": sideMenu === "collapse",
