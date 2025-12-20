@@ -19,7 +19,7 @@ const AppLogo = () => {
         </View>
       ) : (
         <View className="flex items-center justify-center h-14 w-full">
-          <Image src="/images/icon.png" alt="Logo" width={40} height={40} />
+          <Image src="/thumbnail.png" alt="Logo" width={40} height={40} />
         </View>
       )}
     </>

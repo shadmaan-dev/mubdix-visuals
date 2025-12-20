@@ -1,87 +1,97 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { Fragment, useEffect, useState } from "react";
+import { Dialog, Transition } from "@headlessui/react";
 import { X } from "lucide-react";
-import clsx from "clsx";
+import { createPortal } from "react-dom";
 
-type DialogSize = "xs" | "sm" | "md" | "lg" | "xl";
-
-interface DialogProps {
+interface AppDialogProps {
   open: boolean;
+  onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  size?: DialogSize;
-  fullscreen?: boolean;
-  showHeader?: boolean;
-  onClose?: () => void;
+  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "full";
 }
 
-const sizeClasses: Record<DialogSize, string> = {
-  xs: "max-w-xs",
-  sm: "max-w-sm",
-  md: "max-w-md",
-  lg: "max-w-lg",
-  xl: "max-w-2xl",
-};
-
-export default function AppDialog({
+const AppDialog = ({
   open,
+  onClose,
   title,
   children,
   size = "md",
-  fullscreen = false,
-  showHeader = true,
-  onClose = () => { },
-}: DialogProps) {
-  const overlayRef = useRef<HTMLDivElement>(null);
+}: AppDialogProps) => {
+  const [mounted, setMounted] = useState(false);
 
-  // Close on Escape key
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [onClose]);
+    setMounted(true);
+  }, []);
 
-  if (!open) return null;
-
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === overlayRef.current) {
-      onClose();
-    }
+  const sizeClasses = {
+    sm: "max-w-sm",
+    md: "max-w-md",
+    lg: "max-w-lg",
+    xl: "max-w-xl",
+    "2xl": "max-w-2xl",
+    full: "max-w-full m-4",
   };
 
-  return (
-    <div
-      ref={overlayRef}
-      onClick={handleOverlayClick}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30"
-    >
-      <div
-        className={clsx(
-          "three-dim bg-background  rounded-2xl shadow-xl w-full relative flex flex-col",
-          fullscreen ? "h-full max-w-full m-0 bg-background" : sizeClasses[size],
+  if (!mounted) return null;
 
-        )}
-      >
-        {/* Header */}
-        {showHeader && (
-          <div className="flex items-center justify-between border-b border-primary px-4 py-3">
-            {title && <h2 className="text-lg font-semibold">{title}</h2>}
-            <button
-              onClick={onClose}
-              className="p-2 rounded-full hover:bg-primary-hover transition"
-              aria-label="Close dialog"
+  return createPortal(
+    <Transition appear show={open} as={Fragment}>
+      <Dialog as="div" className="relative z-[100]" onClose={onClose}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-black/25 backdrop-blur-sm" />
+        </Transition.Child>
+
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
             >
-              <X className="w-5 h-5" />
-            </button>
+              <Dialog.Panel
+                className={`w-full ${sizeClasses[size]} transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all border border-slate-100`}
+              >
+                <div className="flex justify-between items-center mb-4">
+                  {title && (
+                    <Dialog.Title
+                      as="h3"
+                      className="text-lg font-medium leading-6 text-gray-900"
+                    >
+                      {title}
+                    </Dialog.Title>
+                  )}
+                  <button
+                    type="button"
+                    className="rounded-full p-1 hover:bg-slate-100 transition-colors ml-auto"
+                    onClick={onClose}
+                  >
+                    <X className="h-5 w-5 text-gray-500" />
+                  </button>
+                </div>
+                <div className="mt-2 text-sm text-gray-500">{children}</div>
+              </Dialog.Panel>
+            </Transition.Child>
           </div>
-        )}
-
-        {/* Body */}
-        <div className="overflow-y-auto p-4">{children}</div>
-      </div>
-    </div>
+        </div>
+      </Dialog>
+    </Transition>,
+    document.body
   );
-}
+};
+
+export default AppDialog;

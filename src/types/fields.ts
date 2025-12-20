@@ -10,4 +10,5 @@ export interface SelectFieldProps extends React.SelectHTMLAttributes<HTMLSelectE
   label?: string;
   invalid?: boolean;
   options: { label: string; value: string }[];
+  placeholder?: string;
 }

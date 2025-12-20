@@ -3,11 +3,12 @@ import PublicMedia from "./PublicMedia";
 
 interface MediasProps {
   handleSelect: (media: any) => void;
+  mediaType?: string;
 }
-const Medias = ({ handleSelect }: MediasProps) => {
+const Medias = ({ handleSelect, mediaType }: MediasProps) => {
   return (
     <View>
-      <PublicMedia handleSelect={handleSelect} />
+      <PublicMedia handleSelect={handleSelect} mediaType={mediaType} />
     </View>
   );
 };

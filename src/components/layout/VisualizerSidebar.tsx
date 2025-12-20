@@ -28,7 +28,7 @@ const VisualizerSidebar = ({ project }: VisualizerSidebarProps) => {
           <AppLogo />
         </View>
         <View className="flex-1 overflow-y-auto">
-          <LayerMenu />
+          <LayerMenu project={project} />
         </View>
         <View>
           <MenuItem

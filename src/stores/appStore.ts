@@ -7,6 +7,7 @@ type SideMenuType = "toggled" | "collapse" | "hidden";
 interface IAppDrawer {
   open: boolean;
   component: any | null;
+  absolute?: boolean;
 }
 
 interface AppState {

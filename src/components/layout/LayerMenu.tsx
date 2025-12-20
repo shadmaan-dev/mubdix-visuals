@@ -6,16 +6,30 @@ import { useEffect } from "react";
 import { View } from "../ui/view/View";
 import SearchField from "../ui/fields/search/SearchField";
 
-const LayerMenu = () => {
-  const { data: layers } = useLayers();
+interface LayerMenuProps {
+  project: any;
+}
 
-  const { setLayers, setActiveLayer } = useVisualizerStore();
+const LayerMenu = ({ project }: LayerMenuProps) => {
+  const { data } = useLayers(project.id);
+
+  const { setLayers, setActiveLayer, layers } = useVisualizerStore();
 
   useEffect(() => {
-    if (layers) {
-      setLayers(layers as any);
+    if (!data || !project?.root_layer) return;
+
+    const rootId = project.root_layer;
+
+    const rootLayer = data.find(l => l.id === rootId);
+    const restLayers = data.filter(l => l.id !== rootId);
+
+    if (!rootLayer) {
+      setLayers([...data] as any);
+      return;
     }
-  }, [layers]);
+
+    setLayers([rootLayer, ...restLayers] as any);
+  }, [data, project.root_layer]);
 
   return (
     <View>

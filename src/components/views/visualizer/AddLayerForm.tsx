@@ -8,30 +8,44 @@ import { View } from "@/components/ui/view/View";
 import { useApp } from "@/stores/appStore";
 import { X } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
-import { useCreateLayer } from "@/hooks/layers";
+import { useCreateLayer, useUpdateLayer } from "@/hooks/layers";
+import SelectField from "@/components/ui/fields/select/SelectField";
 
-const AddLayerForm = () => {
+const AddLayerForm = ({ layer }: { layer?: any }) => {
 
   const setAppDrawer = useApp((state) => state.setAppDrawer);
   const create = useCreateLayer();
+  const update = useUpdateLayer();
 
   const {
     handleSubmit,
     control,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      title: "",
-      src: "",
-      type: "video",
-      width: 1920,
-      height: 1024,
+      title: layer?.title || "",
+      src: layer?.src || "",
+      type: layer?.type || "image",
+      width: layer?.width || 1920,
+      height: layer?.height || 1024,
       project_id: "346d0205-8154-4062-a079-1682d1637c66",
     },
   });
 
+  const type = watch("type");
+
+  const typeOptions = [
+    { value: "video", label: "Video" },
+    { value: "image", label: "Image" },
+  ];
+
   const onSubmit = (data: any) => {
-    create.mutate(data);
+    if (layer) {
+      update.mutate({ ...data, id: layer.id });
+    } else {
+      create.mutate(data);
+    }
     setAppDrawer({ open: false, component: null });
   };
 
@@ -59,11 +73,23 @@ const AddLayerForm = () => {
             )}
           />
           <Controller
+            name="type"
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <SelectField
+                options={typeOptions}
+                {...field}
+                invalid={!!errors.type}
+              />
+            )}
+          />
+          <Controller
             name="src"
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <MediaSelector {...field}>
+              <MediaSelector {...field} mediaType={type}>
                 <View className="w-full hover:bg-gray-500 hover:text-white">
                   Select Media
                 </View>
@@ -75,7 +101,7 @@ const AddLayerForm = () => {
         <View>
           <Button
             variant="solid"
-            size="md" label="Add"
+            size="md" label="Save"
             onClick={handleSubmit(onSubmit)}
             className="w-full hover:bg-gray-500 hover:text-white"
           />

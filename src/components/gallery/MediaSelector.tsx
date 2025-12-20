@@ -7,11 +7,12 @@ interface MediaSelectorProps {
   name: string;
   multiple?: boolean;
   value?: string;
+  mediaType?: string;
   onChange?: (value: string) => void;
 }
 
 const MediaSelector = forwardRef<HTMLButtonElement, MediaSelectorProps>((props, ref) => {
-  const { children, name, multiple, value, onChange, ...rest } = props;
+  const { children, name, multiple, value, mediaType, onChange, ...rest } = props;
 
   const [open, setOpen] = useState(false);
 
@@ -24,12 +25,12 @@ const MediaSelector = forwardRef<HTMLButtonElement, MediaSelectorProps>((props, 
 
   return (
     <>
-      <button ref={ref} onClick={() => setOpen(true)} type="button">
+      <button ref={ref} onClick={() => setOpen(true)} type="button" className="border border-slate-200 p-2 rounded">
         {children}
       </button>
 
       <AppDialog open={open} onClose={() => setOpen(false)} size="xl">
-        <Medias handleSelect={handleSelect} />
+        <Medias handleSelect={handleSelect} mediaType={mediaType} />
       </AppDialog>
     </>
   );
