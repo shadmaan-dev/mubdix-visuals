@@ -1,17 +1,24 @@
-import { BookDashed, ChevronRightIcon, Home, Layers, LayoutDashboard } from "lucide-react";
-import MenuItem from "../ui/menu/MenuItem";
+import { useRouter } from "next/navigation";
 import { View } from "../ui/view/View";
+
+import MenuItem from "../ui/menu/MenuItem";
 import AppLogo from "./AppLogo";
 import Drawer from "./Drawer";
-import { useRouter } from "next/navigation";
+
 import SideBarFooter from "./SideBarFooter";
+
+import {
+  Home,
+  ChevronRightIcon,
+  LayoutDashboard
+} from "lucide-react";
 
 const AdminSideBar = () => {
   const router = useRouter();
   return (
     <Drawer>
       <View className="flex flex-col h-full">
-        <View className="flex items-center border-b border-default">
+        <View className="flex items-center border-b border-slate-200">
           <AppLogo />
         </View>
         <View className="flex-1 overflow-y-auto">
@@ -31,7 +38,7 @@ const AdminSideBar = () => {
             onClick={() => router.push("/")}
           />
         </View>
-        <View className="flex h-14 items-center border-t border-default">
+        <View className="flex h-14 items-center border-t border-slate-200">
           <SideBarFooter />
         </View>
       </View>

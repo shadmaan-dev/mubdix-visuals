@@ -12,11 +12,12 @@ import { useState } from "react";
 const LoginPage = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const {
     handleSubmit,
     control,
-    formState: { errors },
   } = useForm({
     defaultValues: {
       email: "",
@@ -25,28 +26,28 @@ const LoginPage = () => {
   });
 
   const onSubmit = (data: any) => {
+    setLoading(true);
     const supabase = supabaseClient();
     supabase.auth.signInWithPassword({
       email: data.email,
       password: data.password,
     }).then((res) => {
-      if (res.error) {
-        console.log(res.error);
-      }
       if (res.data.session) {
         router.push("/");
       }
-    }).catch((err) => {
-      console.log(err);
+    }).catch((_) => {
+      setError("Invalid email or password");
+    }).finally(() => {
+      setLoading(false);
     })
   };
 
   return (
-    <View className="relative w-full max-w-md p-8 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl overflow-hidden z-10">
+    <View className="relative w-full max-w-sm p-8 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl overflow-hidden z-10">
 
       <View className="mb-8 text-center">
         <Typography variant="h4" className="text-white font-bold mb-2">Welcome Back</Typography>
-        <Typography variant="body2" className="text-gray-300">Sign in to continue to Mubdix Visualizer</Typography>
+        <Typography variant="body2" className="text-white">Sign in to continue to Mubdix Visualizer</Typography>
       </View>
 
       <View className="flex flex-col gap-5">
@@ -56,10 +57,10 @@ const LoginPage = () => {
           rules={{ required: true }}
           render={({ field }) => (
             <View>
-              <label className="block text-sm font-medium text-gray-400 mb-1.5">Email Address</label>
+              <label className="block text-sm font-medium text-gray-600 mb-1.5">Email Address</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-500" />
+                  <Mail className="h-5 w-5 text-gray-600" />
                 </div>
                 <input
                   {...field}
@@ -77,10 +78,10 @@ const LoginPage = () => {
           rules={{ required: true }}
           render={({ field }) => (
             <View>
-              <label className="block text-sm font-medium text-gray-400 mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-gray-600 mb-1.5">Password</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-500" />
+                  <Lock className="h-5 w-5 text-gray-600" />
                 </div>
                 <input
                   {...field}
@@ -100,10 +101,11 @@ const LoginPage = () => {
           )}
         />
       </View>
+      {error && <Typography variant="body2" className="text-center text-red-500 my-2">{error}</Typography>}
 
-      <View className="mt-8">
+      <View className="mt-6">
         <Button
-          label="Sign In"
+          label={loading ? "Signing in..." : "Sign In"}
           variant="solid"
           className="w-full !bg-white !text-black font-bold py-3 rounded-lg shadow-lg border-none hover:bg-gray-200"
           onClick={handleSubmit(onSubmit)}

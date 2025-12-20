@@ -89,11 +89,7 @@ const AddLayerForm = ({ layer }: { layer?: any }) => {
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <MediaSelector {...field} mediaType={type}>
-                <View className="w-full hover:bg-gray-500 hover:text-white">
-                  Select Media
-                </View>
-              </MediaSelector>
+              <MediaSelector {...field} mediaType={type} />
             )}
           />
         </View>

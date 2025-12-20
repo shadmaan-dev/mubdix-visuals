@@ -49,12 +49,6 @@ const MenuItem = ({
     >
       {leftIcon && (
         <span className={clsx("flex-shrink-0 text-gray-400 group-hover:text-gray-500", active && "text-gray-500")}>
-          {/* If the icon itself doesn't have size, we might want to enforce it, but typically we pass specific icons. 
-              We can wrap it or just render it. For now, assuming user passes sized icons or we rely on parent.
-              Actually, let's try to constrain it a bit if it's generic content, but usually icons are SVGs. */}
-          {/* We can Clone element to pass className if needed, but let's just render. 
-               Wait, let's try to apply size like in Button/SearchField if possible, or just expect sized icons. 
-               Let's just render the node. */}
           {leftIcon}
         </span>
       )}

@@ -1,3 +1,16 @@
+const MIN_SCALE = 0.2;
+const MAX_SCALE = 5;
+
+export const getZoomPosition = (stage: any, factor: any, center: any) => {
+  const oldScale = stage.scaleX();
+  let newScale = oldScale * factor;
+  newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, newScale));
+  const pointer = center || { x: stage.width() / 2, y: stage.height() / 2 };
+  const mousePointTo = { x: (pointer.x - stage.x()) / oldScale, y: (pointer.y - stage.y()) / oldScale };
+  stage.scale({ x: newScale, y: newScale });
+  return { x: pointer.x - mousePointTo.x * newScale, y: pointer.y - mousePointTo.y * newScale };
+}
+
 export const getSpotPosition = (spot: any, activeLayer: any, stageSize: any) => {
   const { x = 0, y = 0 } = spot.meta_data;
   const cx = (x / activeLayer.width) * stageSize?.width;

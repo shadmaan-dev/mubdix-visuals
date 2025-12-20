@@ -1,7 +1,6 @@
 "use client";
 
 import { useVisualizerContext } from "@/context/VisualizerContext";
-import { LayerType } from "@/types/visualizer";
 import Konva from "konva";
 import { Layer, Image } from "react-konva";
 import { useEffect, useState } from "react";

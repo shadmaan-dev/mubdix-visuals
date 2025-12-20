@@ -1,26 +1,28 @@
 
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "@/components/ui/view/View";
 import { useApp } from "@/stores/appStore";
-import { useVisualizerContext } from "@/context/VisualizerContext";
-import Konva from "konva";
-
-import { Circle, Menu, Square, ZoomIn, ZoomOut, Image as ImageIcon } from "lucide-react";
-import Typography from "../ui/typography/Typography";
-import { useVisualizerStore } from "@/stores/visualizerStore";
-import Button from "../ui/button/Button";
-
-
+import { Menu } from "lucide-react";
+import Button from "@/components/ui/button/Button";
 
 const AdminHeader = () => {
   const { toggleSideMenu, sideMenu } = useApp();
   const [windowWidth, setWindowWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 1200);
 
-
   const handleToggle = () => {
-    toggleSideMenu(sideMenu === 'toggled' ? 'hidden' : 'toggled');
+    let state: any = "";
+    if (sideMenu === "toggled") {
+      state = "collapse";
+    } else if (sideMenu === "collapse") {
+      state = "hidden";
+    } else if (sideMenu === "hidden") {
+      state = "toggled";
+    } else {
+      state = "toggled";
+    }
+    toggleSideMenu(state);
   };
 
   useEffect(() => {
@@ -40,7 +42,6 @@ const AdminHeader = () => {
       toggleSideMenu("toggled");
     }
   }, [windowWidth]);
-
 
   return (
     <View className="surface-inset flex justify-between bg-secondary items-center border-b border-slate-200 h-12 px-4">

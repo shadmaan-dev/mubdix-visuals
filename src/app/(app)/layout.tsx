@@ -4,6 +4,7 @@ import Container from "@/components/layout/Container";
 import RightDrawer from "@/components/layout/RightDrawer";
 import VisualizerHeader from "@/components/layout/VisualizerHeader";
 import VisualizerSidebar from "@/components/layout/VisualizerSidebar";
+import AppLoader from "@/components/shared/AppLoader";
 import { View } from "@/components/ui/view/View";
 import { VisualizerProvider } from "@/context/VisualizerContext";
 import { useProjects } from "@/hooks/projects";
@@ -24,7 +25,7 @@ export default function AppLayout({
     }
   }, [projects]);
 
-  if (!project) return <div>Loading...</div>;
+  if (isLoading || !project) return <AppLoader />;
 
   return (
     <View className="flex w-full h-screen overflow-hidden">
